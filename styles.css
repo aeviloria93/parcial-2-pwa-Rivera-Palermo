@@ -1,0 +1,104 @@
+body {
+    font-family: 'Roboto', sans-serif;
+
+    background-color: #282828;
+    color: #ccc;
+}
+
+/*
+#descPokeDiv{
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.739);
+}*/
+.episode-card {
+    position: fixed;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-height: 90%;
+    max-width: 500px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.917);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    /* Agregar desplazamiento vertical si el contenido excede la altura de la tarjeta */
+    overflow-y: auto;
+  }
+  
+  
+  ul {
+    list-style-type: none;
+    text-align: center;
+  }
+  
+  li {
+    cursor: pointer;
+
+  }
+
+  
+
+
+
+
+.listH{  
+
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.917);
+}
+
+
+
+#desc {
+max-width: fit-content;
+}
+
+/*
+
+ul {
+    list-style-image: url("img/5.svg");
+}
+    */
+
+#results ul li {
+    cursor: pointer;
+}
+
+.characters-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .sprite {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+
+
+#results {
+    margin: auto;
+    margin: 1em;
+}
+
+
+
+/*********************/
+
+
