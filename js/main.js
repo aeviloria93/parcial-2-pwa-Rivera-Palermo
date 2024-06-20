@@ -135,7 +135,7 @@ let eventoInstalacion = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
 
-    console.log("beforeinstallprompt", e)
+    //console.log("beforeinstallprompt", e)
 
     eventoInstalacion = e;
 
@@ -146,6 +146,31 @@ installButon.addEventListener("click", () => {
 
     console.log("eventoInstalacion", eventoInstalacion);
 
+    if(eventoInstalacion){
+        eventoInstalacion.prompt()
+        .then( (resultado) => {
+            const eleccion = resultado.outcome;
+            if(eleccion == "dissmissed") {
+                console.log('instalacion cancelada')
 
+            }else if(eleccion == "accepted"){
+                console.log('instalacion apetada')
+                ocultarBoton()
+
+            }
+
+        })
+        .catch((error) => console.log('error al instalar'))
+    }
 
 })
+
+
+const ocultarBoton = () =>{
+    installButon.style.display = "none";
+}
+
+if(eventoInstalacion == null) {
+
+    installButon.style.display = "none";
+}
