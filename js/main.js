@@ -130,3 +130,22 @@ EpiCont.appendChild(card);
 }
 
 fetchEpisodes();
+
+let eventoInstalacion = null;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+
+    console.log("beforeinstallprompt", e)
+
+    eventoInstalacion = e;
+
+});
+
+const installButon = document.getElementById("instalar");
+installButon.addEventListener("click", () => {
+
+    console.log("eventoInstalacion", eventoInstalacion);
+
+
+
+})

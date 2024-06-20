@@ -1,16 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
-  
-
 async function fetchPokemons() {
 
 
@@ -233,6 +222,8 @@ fetchPokemons();
 
 const verHistorialButton = document.getElementById('verHistorial');
 verHistorialButton.addEventListener('click', mostrarHistorial);
+
+
 
 const historyDiv = document.getElementById('history');
 
