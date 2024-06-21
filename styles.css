@@ -5,31 +5,15 @@ body {
     color: #ccc;
 }
 
-/*
-#descPokeDiv{
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.739);
-}*/
+
 .episode-card {
-    position: fixed;
-    z-index: 1;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    max-height: 90%;
-    max-width: 500px;
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.917);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    
-    /* Agregar desplazamiento vertical si el contenido excede la altura de la tarjeta */
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.917);
     overflow-y: auto;
   }
   
@@ -66,12 +50,7 @@ body {
 max-width: fit-content;
 }
 
-/*
 
-ul {
-    list-style-image: url("img/5.svg");
-}
-    */
 
 #results ul li {
     cursor: pointer;
@@ -99,6 +78,6 @@ ul {
 
 
 
-/*********************/
+
 
 
