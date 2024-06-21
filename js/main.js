@@ -41,6 +41,33 @@ window.addEventListener('DOMContentLoaded', (e) => {
 
 const api_url = "https://rickandmortyapi.com/api/episode";
 const EpiCont = document.getElementById('EpiCont');
+let db; // Variable para almacenar la base de datos IndexedDB
+
+// Abre una base de datos llamada "RickAndMortyDB" con la versión 1
+const openRequest = indexedDB.open('RickAndMortyDB', 1);
+
+openRequest.onupgradeneeded = (event) => {
+    db = event.target.result;
+
+    // Crea un almacén de objetos llamado "episodes"
+    const store = db.createObjectStore('episodes', { keyPath: 'id' });
+
+    // Crea un índice para buscar por nombre de episodio
+    store.createIndex('byName', 'name', { unique: false });
+};
+
+openRequest.onsuccess = (event) => {
+    db = event.target.result;
+
+    // Realiza operaciones con la base de datos
+    // Por ejemplo, agregar episodios al almacén "episodes"
+    // o buscar episodios por nombre utilizando el índice "byName"
+    //fetchEpisodes();
+};
+
+openRequest.onerror = (event) => {
+    console.error('Error al abrir la base de datos:', event.target.error);
+};
 
 function fetchEpisodes() {
     fetch(api_url)
@@ -63,11 +90,21 @@ function displayList(episodes) {
                 historial.push(episode.name);
                 localStorage.setItem('EpisodeHistorial', JSON.stringify(historial));
             }
+
+            // Agrega el episodio al almacén "episodes" en IndexedDB
+            addEpisodeToDB(episode);
+
             displayEpisodeDetails(episode);
         };
         list.appendChild(item);
     });
     EpiCont.appendChild(list);
+}
+
+function addEpisodeToDB(episode) {
+    const transaction = db.transaction(['episodes'], 'readwrite');
+    const store = transaction.objectStore('episodes');
+    store.add(episode);
 }
 
 function displayEpisodeDetails(episode) {
