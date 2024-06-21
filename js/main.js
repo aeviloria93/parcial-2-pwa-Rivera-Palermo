@@ -40,19 +40,17 @@ window.addEventListener('DOMContentLoaded', (e) => {
 });
 
 const api_url = "https://rickandmortyapi.com/api/episode";
-let EpiCont = document.getElementById('EpiCont');
+const EpiCont = document.getElementById('EpiCont');
 
-async function fetchEpisodes() {
-    try {
-        const response = await fetch(api_url);
-        const data = await response.json();
-        displayList(data.results);
-    } catch (error) {
-        console.error('Error:', error);
-        // Considera mostrar un mensaje al usuario aquí
-    }
+function fetchEpisodes() {
+    fetch(api_url)
+        .then(response => response.json())
+        .then(data => displayList(data.results))
+        .catch(error => {
+            console.error('Error:', error);
+            // Considera mostrar un mensaje al usuario aquí
+        });
 }
-
 
 function displayList(episodes) {
     const list = document.createElement('ul');
@@ -60,17 +58,11 @@ function displayList(episodes) {
         const item = document.createElement('li');
         item.textContent = `Episodio ${episode.id}: ${episode.name}`;
         item.onclick = () => {
-
-
-
-        const historial = JSON.parse(localStorage.getItem('EpisodeHistorial')) || [];
-
-        if (!historial.includes(episode.name)) {
-            historial.push(episode.name);
-            localStorage.setItem('EpisodeHistorial', JSON.stringify(historial));
-        }
-
-
+            const historial = JSON.parse(localStorage.getItem('EpisodeHistorial')) || [];
+            if (!historial.includes(episode.name)) {
+                historial.push(episode.name);
+                localStorage.setItem('EpisodeHistorial', JSON.stringify(historial));
+            }
             displayEpisodeDetails(episode);
         };
         list.appendChild(item);
@@ -78,7 +70,7 @@ function displayList(episodes) {
     EpiCont.appendChild(list);
 }
 
-async function displayEpisodeDetails(episode) {
+function displayEpisodeDetails(episode) {
     // Limpiar cualquier tarjeta existente
     const existingCard = document.querySelector('.episode-card');
     if (existingCard) {
@@ -88,19 +80,17 @@ async function displayEpisodeDetails(episode) {
     // Crear y mostrar la tarjeta con los detalles del episodio
     const card = document.createElement('div');
     card.className = 'episode-card p-4';
-    closeButton = document.createElement('button');
+    const closeButton = document.createElement('button');
     closeButton.textContent = 'X';
     closeButton.setAttribute('class', 'btn closeButton bg-danger text-center border border-0 float-end');
-  
     card.appendChild(closeButton);
 
     const title = document.createElement('h2');
     title.textContent = `Episodio ${episode.id}: ${episode.name}`;
+    card.appendChild(title);
 
     const airDate = document.createElement('p');
     airDate.textContent = `Fecha de emisión: ${episode.air_date}`;
-
-    card.appendChild(title);
     card.appendChild(airDate);
 
     // Obtener y mostrar las imágenes de todos los personajes
@@ -108,41 +98,38 @@ async function displayEpisodeDetails(episode) {
     charactersContainer.setAttribute('class', 'characters-container');
 
     // Asumiendo que episode.characters es un array de URLs completas
-    for (const characterUrl of episode.characters) {
-        try {
-            const characterResponse = await fetch(characterUrl);
-            const characterData = await characterResponse.json();
+    Promise.all(episode.characters.map(characterUrl => fetch(characterUrl)
+        .then(response => response.json())
+        .then(characterData => {
             const spriteCont = document.createElement('div');
             spriteCont.setAttribute('class', 'p-1');
             const Sprite = document.createElement('img');
             Sprite.setAttribute('class', 'sprite');
             Sprite.src = characterData.image;
-
             spriteCont.appendChild(Sprite);
             charactersContainer.appendChild(spriteCont);
-        } catch (error) {
+        })
+        .catch(error => {
             console.error('Error:', error);
             // Considera mostrar un mensaje al usuario aquí
-        }
-    }
+        })
+    )).then(() => {
+        closeButton.addEventListener('click', () => {
+            if (card) {
+                card.remove();
+            }
+        });
 
-
-  closeButton.addEventListener('click', () => {
-      if (card) {
-          card.remove();
-      }
-  })
-personajes = document.createElement('p');
-personajes.textContent = 'Personajes en este episodio:'
-card.appendChild(personajes);
-
-
-  card.appendChild(charactersContainer);
-
-EpiCont.appendChild(card);
+        const personajes = document.createElement('p');
+        personajes.textContent = 'Personajes en este episodio:';
+        card.appendChild(personajes);
+        card.appendChild(charactersContainer);
+        EpiCont.appendChild(card);
+    });
 }
 
 fetchEpisodes();
+
 
 
 
