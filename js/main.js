@@ -39,6 +39,29 @@ window.addEventListener('DOMContentLoaded', (e) => {
     //fetchEpisodes();
 });
 
+
+
+
+
+        // Escucha el evento beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Muestra el botón cuando corresponda
+            document.getElementById('instalar').style.display = 'block';
+
+            // Al hacer clic en el botón, invoca el flujo de instalación
+            document.getElementById('instalar').addEventListener('click', () => {
+                e.prompt(); // Invoca el prompt de instalación
+            });
+        });
+
+
+
+
+
+
+
+
+
 const api_url = "https://rickandmortyapi.com/api/episode";
 const EpiCont = document.getElementById('EpiCont');
 let db; // Variable para almacenar la base de datos IndexedDB
@@ -271,7 +294,7 @@ okH(mostrarHistorial);
   
 }
 
-
+/*
 let eventoInstalacion = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
@@ -314,4 +337,4 @@ const ocultarBoton = () =>{
 if(eventoInstalacion == null) {
 
     installButon.style.display = "none";
-}
+}*/
