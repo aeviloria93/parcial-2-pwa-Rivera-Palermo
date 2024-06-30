@@ -7,7 +7,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
-  "start_url": "parcial-2-pwa-Rivera-Palermo/index.html",
+  "start_url": "/parcial-2-pwa-Rivera-Palermo/index.html",
   "icons": [
     {
       "src": "img/icon-72x72.png",
