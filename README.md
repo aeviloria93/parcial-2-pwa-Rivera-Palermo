@@ -1,1 +1,1 @@
-# parcial-2-pwa-Rivera-Palermo2
+# parcial-2-pwa-Rivera-Palermo
