@@ -286,8 +286,8 @@ installButon.addEventListener("click", () => {
 const ocultarBoton = () =>{
     installButon.style.display = "none";
 }
-
-if(eventoInstalacion == null) {
+ 
+if(eventoInstalacion !== null) {
 
     installButon.style.display = "none";
-}
+} 
