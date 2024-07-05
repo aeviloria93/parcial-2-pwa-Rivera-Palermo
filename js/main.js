@@ -33,6 +33,7 @@ window.addEventListener('DOMContentLoaded', (e) => {
             })
             .catch(error => {
                 console.error('Error al registrar el Service Worker:', error);
+                
             });
     }
 
@@ -98,7 +99,8 @@ function fetchEpisodes() {
         .then(data => displayList(data.results))
         .catch(error => {
             console.error('Error:', error);
-            // Considera mostrar un mensaje al usuario aquí
+         // Redirige al usuario a error.html
+         window.location.href = 'error.html';
         });
 }
 
@@ -181,7 +183,8 @@ DivContEpi.setAttribute('class', 'DivContEpi');
         })
         .catch(error => {
             console.error('Error:', error);
-            // Considera mostrar un mensaje al usuario aquí
+         // Redirige al usuario a error.html
+         window.location.href = 'error.html';
         })
     )).then(() => {
         closeButton.addEventListener('click', () => {
