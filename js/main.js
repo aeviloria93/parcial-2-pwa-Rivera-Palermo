@@ -139,7 +139,7 @@ function displayEpisodeDetails(episode) {
 
     // Crear y mostrar la tarjeta con los detalles del episodio
     const card = document.createElement('div');
-    card.className = 'episode-card p-4';
+    card.className = 'episode-card p-4 m-auto  col-md-8 col-sm-10  ';
     const closeButton = document.createElement('button');
     closeButton.textContent = 'X';
     closeButton.setAttribute('class', 'btn closeButton bg-danger text-center border border-0 float-end');
@@ -156,6 +156,16 @@ function displayEpisodeDetails(episode) {
     // Obtener y mostrar las imágenes de todos los personajes
     const charactersContainer = document.createElement('div');
     charactersContainer.setAttribute('class', 'characters-container');
+
+
+    const personajes = document.createElement('p');
+    personajes.textContent = 'Personajes en este episodio:';
+    card.appendChild(personajes);
+    card.appendChild(charactersContainer);
+const DivContEpi = document.createElement('div');
+DivContEpi.setAttribute('class', 'DivContEpi');
+
+
 
     // Asumiendo que episode.characters es un array de URLs completas
     Promise.all(episode.characters.map(characterUrl => fetch(characterUrl)
@@ -175,16 +185,15 @@ function displayEpisodeDetails(episode) {
         })
     )).then(() => {
         closeButton.addEventListener('click', () => {
-            if (card) {
-                card.remove();
+            if (DivContEpi) {
+                DivContEpi.remove();
             }
         });
 
-        const personajes = document.createElement('p');
-        personajes.textContent = 'Personajes en este episodio:';
-        card.appendChild(personajes);
-        card.appendChild(charactersContainer);
-        EpiCont.appendChild(card);
+
+DivContEpi.appendChild(card);
+        //EpiCont.appendChild(card);
+        EpiCont.appendChild(DivContEpi);
     });
 }
 
