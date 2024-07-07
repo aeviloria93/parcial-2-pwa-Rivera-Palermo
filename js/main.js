@@ -68,7 +68,7 @@ window.addEventListener('appinstalled', () => {
 
 
 
-
+Err = document.createElement('p');
 const api_url = "https://rickandmortyapi.com/api/episode";
 const EpiCont = document.getElementById('EpiCont');
 let db; // Variable para almacenar la base de datos IndexedDB
@@ -106,7 +106,7 @@ function fetchEpisodes() {
         .catch(error => {
             console.error('Error:', error);
          // Redirige al usuario a error.html
-         window.location.href = 'error.html';
+         //window.location.href = 'error.html';
         });
 }
 
@@ -186,11 +186,19 @@ DivContEpi.setAttribute('class', 'DivContEpi');
             Sprite.src = characterData.image;
             spriteCont.appendChild(Sprite);
             charactersContainer.appendChild(spriteCont);
+            Err.textContent = ``;
         })
         .catch(error => {
             console.error('Error:', error);
          // Redirige al usuario a error.html
-         window.location.href = 'error.html';
+         //window.location.href = 'error.html';
+
+         Err.textContent = `Hubo un error al cargar!`;
+Err.setAttribute('class', 'text-danger');
+DivContEpi.appendChild(Err);
+
+
+
         })
     )).then(() => {
         closeButton.addEventListener('click', () => {
