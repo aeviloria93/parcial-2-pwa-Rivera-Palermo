@@ -73,3 +73,22 @@
 
 </body>
 </html>
+
+<script>
+    
+// Supongamos que tienes una URL donde se encuentra tu archivo PHP que devuelve el JSON
+const url = 'procesar_datos_formulario.php';
+
+// Realiza la solicitud fetch
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    
+    console.log(data); // Muestra el JSON en la consola
+    
+  })
+  .catch(error => {
+    console.error('Error al obtener los datos:', error);
+  });
+
+</script>

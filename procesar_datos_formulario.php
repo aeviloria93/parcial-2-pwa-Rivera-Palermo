@@ -8,7 +8,7 @@ $datos = [
 ];
  echo json_encode($datos);
 
-
-
+ header('Location: form.html');
+ exit;
   
 ?>
