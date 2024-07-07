@@ -44,16 +44,22 @@ window.addEventListener('DOMContentLoaded', (e) => {
 
 
 
-        // Escucha el evento beforeinstallprompt
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Muestra el botón cuando corresponda
-            document.getElementById('instalar').style.display = 'block';
+      // Escucha el evento beforeinstallprompt
+ window.addEventListener('beforeinstallprompt', (e) => {
+    // Muestra el botón cuando corresponda
+    document.getElementById('installButton').style.display = 'block';
 
-            // Al hacer clic en el botón, invoca el flujo de instalación
-            document.getElementById('instalar').addEventListener('click', () => {
-                e.prompt(); // Invoca el prompt de instalación
-            });
-        });
+    // Al hacer clic en el botón, invoca el flujo de instalación
+    document.getElementById('installButton').addEventListener('click', () => {
+        e.prompt(); // Invoca el prompt de instalación
+    });
+});
+
+// Escucha el evento appinstalled
+window.addEventListener('appinstalled', () => {
+    // Oculta el botón después de la instalación
+    document.getElementById('installButton').style.display = 'none';
+});
 
 
 
