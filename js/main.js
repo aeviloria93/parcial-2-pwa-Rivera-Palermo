@@ -186,7 +186,7 @@ DivContEpi.setAttribute('class', 'DivContEpi');
             Sprite.src = characterData.image;
             spriteCont.appendChild(Sprite);
             charactersContainer.appendChild(spriteCont);
-            Err.textContent = ``;
+            //Err.textContent = ``;
         })
         .catch(error => {
             console.error('Error:', error);
