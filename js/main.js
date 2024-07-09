@@ -39,68 +39,20 @@ window.addEventListener('DOMContentLoaded', (e) => {
     //fetchEpisodes();
 });
 
-
-
-
-
-        // Escucha el evento beforeinstallprompt
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Muestra el botón cuando corresponda
-            document.getElementById('instalar').style.display = 'block';
-
-            // Al hacer clic en el botón, invoca el flujo de instalación
-            document.getElementById('instalar').addEventListener('click', () => {
-                e.prompt(); // Invoca el prompt de instalación
-            });
-        });
-
-
-
-
-
-
-
-
-
 const api_url = "https://rickandmortyapi.com/api/episode";
-const EpiCont = document.getElementById('EpiCont');
-let db; // Variable para almacenar la base de datos IndexedDB
+let EpiCont = document.getElementById('EpiCont');
 
-// Abre una base de datos llamada "RickAndMortyDB" con la versión 1
-const openRequest = indexedDB.open('RickAndMortyDB', 1);
-
-openRequest.onupgradeneeded = (event) => {
-    db = event.target.result;
-
-    // Crea un almacén de objetos llamado "episodes"
-    const store = db.createObjectStore('episodes', { keyPath: 'id' });
-
-    // Crea un índice para buscar por nombre de episodio
-    store.createIndex('byName', 'name', { unique: false });
-};
-
-openRequest.onsuccess = (event) => {
-    db = event.target.result;
-
-    // Realiza operaciones con la base de datos
-    // Por ejemplo, agregar episodios al almacén "episodes"
-    // o buscar episodios por nombre utilizando el índice "byName"
-    //fetchEpisodes();
-};
-
-openRequest.onerror = (event) => {
-    console.error('Error al abrir la base de datos:', event.target.error);
-};
-
-function fetchEpisodes() {
-    fetch(api_url)
-        .then(response => response.json())
-        .then(data => displayList(data.results))
-        .catch(error => {
-            console.error('Error:', error);
-            // Considera mostrar un mensaje al usuario aquí
-        });
+async function fetchEpisodes() {
+    try {
+        const response = await fetch(api_url);
+        const data = await response.json();
+        displayList(data.results);
+    } catch (error) {
+        console.error('Error:', error);
+        // Considera mostrar un mensaje al usuario aquí
+    }
 }
+
 
 function displayList(episodes) {
     const list = document.createElement('ul');
@@ -108,14 +60,16 @@ function displayList(episodes) {
         const item = document.createElement('li');
         item.textContent = `Episodio ${episode.id}: ${episode.name}`;
         item.onclick = () => {
-            const historial = JSON.parse(localStorage.getItem('EpisodeHistorial')) || [];
-            if (!historial.includes(episode.name)) {
-                historial.push(episode.name);
-                localStorage.setItem('EpisodeHistorial', JSON.stringify(historial));
-            }
 
-            // Agrega el episodio al almacén "episodes" en IndexedDB
-            addEpisodeToDB(episode);
+
+
+        const historial = JSON.parse(localStorage.getItem('EpisodeHistorial')) || [];
+
+        if (!historial.includes(episode.name)) {
+            historial.push(episode.name);
+            localStorage.setItem('EpisodeHistorial', JSON.stringify(historial));
+        }
+
 
             displayEpisodeDetails(episode);
         };
@@ -124,13 +78,7 @@ function displayList(episodes) {
     EpiCont.appendChild(list);
 }
 
-function addEpisodeToDB(episode) {
-    const transaction = db.transaction(['episodes'], 'readwrite');
-    const store = transaction.objectStore('episodes');
-    store.add(episode);
-}
-
-function displayEpisodeDetails(episode) {
+async function displayEpisodeDetails(episode) {
     // Limpiar cualquier tarjeta existente
     const existingCard = document.querySelector('.episode-card');
     if (existingCard) {
@@ -140,17 +88,19 @@ function displayEpisodeDetails(episode) {
     // Crear y mostrar la tarjeta con los detalles del episodio
     const card = document.createElement('div');
     card.className = 'episode-card p-4';
-    const closeButton = document.createElement('button');
+    closeButton = document.createElement('button');
     closeButton.textContent = 'X';
     closeButton.setAttribute('class', 'btn closeButton bg-danger text-center border border-0 float-end');
+  
     card.appendChild(closeButton);
 
     const title = document.createElement('h2');
     title.textContent = `Episodio ${episode.id}: ${episode.name}`;
-    card.appendChild(title);
 
     const airDate = document.createElement('p');
     airDate.textContent = `Fecha de emisión: ${episode.air_date}`;
+
+    card.appendChild(title);
     card.appendChild(airDate);
 
     // Obtener y mostrar las imágenes de todos los personajes
@@ -158,38 +108,41 @@ function displayEpisodeDetails(episode) {
     charactersContainer.setAttribute('class', 'characters-container');
 
     // Asumiendo que episode.characters es un array de URLs completas
-    Promise.all(episode.characters.map(characterUrl => fetch(characterUrl)
-        .then(response => response.json())
-        .then(characterData => {
+    for (const characterUrl of episode.characters) {
+        try {
+            const characterResponse = await fetch(characterUrl);
+            const characterData = await characterResponse.json();
             const spriteCont = document.createElement('div');
             spriteCont.setAttribute('class', 'p-1');
             const Sprite = document.createElement('img');
             Sprite.setAttribute('class', 'sprite');
             Sprite.src = characterData.image;
+
             spriteCont.appendChild(Sprite);
             charactersContainer.appendChild(spriteCont);
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Error:', error);
             // Considera mostrar un mensaje al usuario aquí
-        })
-    )).then(() => {
-        closeButton.addEventListener('click', () => {
-            if (card) {
-                card.remove();
-            }
-        });
+        }
+    }
 
-        const personajes = document.createElement('p');
-        personajes.textContent = 'Personajes en este episodio:';
-        card.appendChild(personajes);
-        card.appendChild(charactersContainer);
-        EpiCont.appendChild(card);
-    });
+
+  closeButton.addEventListener('click', () => {
+      if (card) {
+          card.remove();
+      }
+  })
+personajes = document.createElement('p');
+personajes.textContent = 'Personajes en este episodio:'
+card.appendChild(personajes);
+
+
+  card.appendChild(charactersContainer);
+
+EpiCont.appendChild(card);
 }
 
 fetchEpisodes();
-
 
 
 
@@ -294,7 +247,7 @@ okH(mostrarHistorial);
   
 }
 
-/*
+
 let eventoInstalacion = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
@@ -337,6 +290,50 @@ const ocultarBoton = () =>{
 if(eventoInstalacion !== null) {
 
     installButon.style.display = "none";
-
 } 
-}*/
+
+/* document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contacto-form');
+    const enviarBtn = document.getElementById('enviar-btn');
+
+    enviarBtn.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevenir el envío normal del formulario
+        
+        const formData = new FormData(form);
+        const data = {
+            nombre: formData.get('nombre'),
+            email: formData.get('email'),
+            mensaje: formData.get('mensaje')
+        };
+
+        // URL a la que enviar los datos (reemplaza con tu URL)
+        const url = 'procesar_acc.php';
+
+        // Configurar la solicitud Fetch con método POST y cuerpo JSON
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data) // Convertir objeto JavaScript a JSON
+        })
+        .then(response => response.json()) // Convertir la respuesta a JSON
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            // Redireccionar a procesar_datos_php si la respuesta es exitosa
+            if (data.status === 'success') {
+                window.location.href = 'procesar_datos_php'; // Redirigir al usuario
+            } else {
+                mostrarMensaje('Hubo un error al procesar los datos', 'alert-danger');
+            }
+        })
+        .catch((error) => {
+            console.error('Error al enviar los datos:', error);
+            mostrarMensaje('Hubo un error al enviar el mensaje', 'alert-danger');
+        });
+    });
+
+
+});
+
+console.log('hola mundo') */
