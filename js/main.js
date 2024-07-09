@@ -292,48 +292,15 @@ if(eventoInstalacion !== null) {
     installButon.style.display = "none";
 } 
 
-/* document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('contacto-form');
-    const enviarBtn = document.getElementById('enviar-btn');
+async function submitForm() {
+    const form = document.getElementById('contactForm');
+    const formData = new FormData(form);
 
-    enviarBtn.addEventListener('click', function(event) {
-        event.preventDefault(); // Prevenir el envío normal del formulario
-        
-        const formData = new FormData(form);
-        const data = {
-            nombre: formData.get('nombre'),
-            email: formData.get('email'),
-            mensaje: formData.get('mensaje')
-        };
-
-        // URL a la que enviar los datos (reemplaza con tu URL)
-        const url = 'procesar_acc.php';
-
-        // Configurar la solicitud Fetch con método POST y cuerpo JSON
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data) // Convertir objeto JavaScript a JSON
-        })
-        .then(response => response.json()) // Convertir la respuesta a JSON
-        .then(data => {
-            console.log('Respuesta del servidor:', data);
-            // Redireccionar a procesar_datos_php si la respuesta es exitosa
-            if (data.status === 'success') {
-                window.location.href = 'procesar_datos_php'; // Redirigir al usuario
-            } else {
-                mostrarMensaje('Hubo un error al procesar los datos', 'alert-danger');
-            }
-        })
-        .catch((error) => {
-            console.error('Error al enviar los datos:', error);
-            mostrarMensaje('Hubo un error al enviar el mensaje', 'alert-danger');
-        });
+    const response = await fetch('procesar_datos_formulario.php', {
+        method: 'POST',
+        body: formData
     });
 
-
-});
-
-console.log('hola mundo') */
+    const result = await response.text();
+    document.getElementById('response').innerHTML = result;
+}
